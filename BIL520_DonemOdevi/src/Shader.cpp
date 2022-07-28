@@ -1,5 +1,27 @@
 #include "Shader.h"
 
+#include <GL/glew.h>
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+Shader::Shader(const std::string& path_vs, const std::string& path_fs) {
+	std::string vs = Shader::read_shader_file(path_vs);
+	std::string fs = Shader::read_shader_file(path_fs);
+	id = Shader::create_shader_program(vs, fs);
+}
+
+Shader::~Shader() {}
+
+void Shader::use() {
+	glUseProgram(id);
+}
+
+void Shader::release() {
+	glUseProgram(0);
+}
+
 unsigned int Shader::compile_shader(unsigned int type, const std::string& source) {
 	unsigned int id = glCreateShader(type);
 	const char* src = source.c_str();
@@ -32,4 +54,15 @@ unsigned int Shader::create_shader_program(const std::string& vertex_shader, con
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 	return id;
+}
+
+std::string Shader::read_shader_file(const std::string& path) {
+	auto program = std::ostringstream();
+	std::ifstream program_file(path);
+	if (!program_file.is_open()) {
+		std::cout << "ERR: Could not open shader program file: " << path << std::endl;
+		return std::string("");
+	}
+	program << program_file.rdbuf();
+	return program.str();
 }

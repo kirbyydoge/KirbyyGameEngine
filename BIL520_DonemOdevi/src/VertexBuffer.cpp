@@ -1,6 +1,5 @@
 #include "VertexBuffer.h"
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size) {
 	glGenBuffers(1, &id);
@@ -12,10 +11,10 @@ VertexBuffer::~VertexBuffer() {
 	glDeleteBuffers(1, &id);
 }
 
-void VertexBuffer::bind() {
+void VertexBuffer::bind() const {
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
-void VertexBuffer::unbind() {
+void VertexBuffer::unbind() const {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
