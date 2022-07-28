@@ -16,87 +16,111 @@
     <Filter Include="src">
       <UniqueIdentifier>{86d930d8-e969-4660-9a97-c7edb053238a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{549c93a4-807b-48dc-82ee-328a70d4f266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\shaders">
+      <UniqueIdentifier>{a6f25db8-92e5-408d-999c-a540d45ef39a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\BaseScene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameRenderer.h">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameRenderer.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\GameInput.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\GameRenderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\GameScene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glm_extended.h">
-      <Filter>src</Filter>
+    <ClCompile Include="src\GameTime.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameTime.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\GameWindow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameInput.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\glm_extended.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameWindow.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glm_extended.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Sprite.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Application.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\BaseScene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Game.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectComponent.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\GameInput.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\GameObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameTime.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\GameRenderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameInput.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\GameScene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameWindow.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\GameTime.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\GameWindow.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\glm_extended.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\LiveComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ObjectComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderableComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Transform.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

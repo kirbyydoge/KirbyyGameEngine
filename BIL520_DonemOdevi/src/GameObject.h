@@ -1,5 +1,7 @@
 #pragma once
 #include "ObjectComponent.h"
+#include "LiveComponent.h"
+#include "RenderableComponent.h"
 #include "Transform.h"
 #include "glm_extended.h"
 
@@ -25,6 +27,8 @@ public:
 	std::string get_name();
 	template <class T> void add_component(const T* component);
 	template <class T> T* get_component();
+	std::unordered_map<id_t, ObjectComponent*>& get_components();
+	std::vector<RenderableComponent*>& get_renderable_components();
 private:
 	static id_t id_ctr;
 	static std::unordered_map<id_t, GameObject*> objects;
@@ -34,4 +38,6 @@ private:
 	std::string name;
 	Transform transform;
 	std::unordered_map<id_t, ObjectComponent*> components;
+	std::vector<LiveComponent*> live_components;
+	std::vector<RenderableComponent*> renderable_components;
 };

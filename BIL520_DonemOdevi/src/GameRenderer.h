@@ -4,8 +4,8 @@
 
 class GameRenderer {
 public:
-	static GameRenderer& get_renderer();
-	void render(const GameScene &scene);
+	static GameRenderer* get_renderer();
+	void render(GameScene &scene);
 private:
 	static std::mutex inst_lock;
 	static GameRenderer *inst;

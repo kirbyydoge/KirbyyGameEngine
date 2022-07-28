@@ -1,6 +1,9 @@
 #include "GameRenderer.h"
 
-GameRenderer& GameRenderer::get_renderer() {
+std::mutex GameRenderer::inst_lock;
+GameRenderer* GameRenderer::inst = nullptr;
+
+GameRenderer* GameRenderer::get_renderer() {
 	// TODO: This is proven to be not thread-safe. Change implementation later.
 	if (inst == nullptr) {
 		inst_lock.lock();
@@ -9,11 +12,14 @@ GameRenderer& GameRenderer::get_renderer() {
 		}
 		inst_lock.unlock();
 	}
-	return *inst;
+	return inst;
 }
 
-void GameRenderer::render(const GameScene &scene) {
-	
+void GameRenderer::render(GameScene& scene) {
+	auto renderable_objects = scene.get_renderable_components();
+	for (auto obj : renderable_objects) {
+		
+	}
 }
 
 GameRenderer::GameRenderer() {

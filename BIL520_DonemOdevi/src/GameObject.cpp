@@ -30,8 +30,14 @@ GameObject& GameObject::instantiate_object(std::string name, glm::vec3 pos) {
 }
 
 template <class T>
-void GameObject::add_component(const T *component) {
+void GameObject::add_component(const T* component) {
 	components[typeid(T)] = component;
+	if (std::is_base_of<RenderableComponent, T>) {
+		renderable_components.push_back(component);
+	}
+	if (std::is_base_of<LiveComponent, T>) {
+		live_components.push_back(component);
+	}
 }
 
 template <class T>
@@ -44,32 +50,32 @@ T* GameObject::get_component() {
 }
 
 void GameObject::start() {
-	for (auto& comp : components) {
+	for (auto comp : components) {
 		comp.second->start();
 	}
 }
 
 void GameObject::fixed_update() {
-	for (auto& comp : components) {
-		comp.second->fixed_update();
+	for (auto comp : live_components) {
+		comp->fixed_update();
 	}
 }
 
 void GameObject::early_update() {
-	for (auto& comp : components) {
-		comp.second->early_update();
+	for (auto comp : live_components) {
+		comp->early_update();
 	}
 }
 
 void GameObject::update() {
-	for (auto& comp : components) {
-		comp.second->update();
+	for (auto comp : live_components) {
+		comp->update();
 	}
 }
 
 void GameObject::late_update() {
-	for (auto& comp : components) {
-		comp.second->late_update();
+	for (auto comp : live_components) {
+		comp->late_update();
 	}
 }
 
@@ -85,4 +91,12 @@ id_t GameObject::get_id() {
 
 std::string GameObject::get_name() {
 	return name;
+}
+
+std::unordered_map<id_t, ObjectComponent*>& GameObject::get_components() {
+	return components;
+}
+
+std::vector<RenderableComponent*>& GameObject::get_renderable_components() {
+	return renderable_components;
 }

@@ -6,6 +6,10 @@ GLFWwindow* GameWindow::create_window(int width, int height, std::string window_
 		std::cout << "ERR: Could not initialize GLFW." << std::endl;
 		return nullptr;
 	}
+	if (glewInit() != GLEW_OK) {
+		std::cout << "ERR: Could not initalize GLEW." << std::endl;
+		return nullptr;
+	}
 	window = glfwCreateWindow(width, height, window_name.c_str(), NULL, NULL);
 	if (!window) {
 		std::cout << "ERR: Could not initialize game window." << std::endl;

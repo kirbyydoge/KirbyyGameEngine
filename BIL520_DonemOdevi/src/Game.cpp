@@ -5,11 +5,15 @@
 
 Game::Game(int width, int height, std::string window_name) {
 	game_window = nullptr;
+	renderer = nullptr;
 	is_running = false;
 	if (!glfwInit()) {
 		std::cout << "Could not initialize GLFW." << std::endl;
 		return;
 	}
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	game_window = GameWindow::create_window(width, height, window_name);
 	if (!game_window) {
 		glfwTerminate();
@@ -38,9 +42,9 @@ GLFWwindow* Game::get_game_window() {
 }
 
 void Game::update() {
-	
+	scene_manager.get_active_scene()->update();
 }
 
 void Game::render() {
-	
+	renderer->render(*scene_manager.get_active_scene());
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
 
@@ -15,7 +16,7 @@ private:
 	bool is_running;
 	GLFWwindow* game_window;
 	SceneManager scene_manager;
-	GameRenderer& renderer;
+	GameRenderer* renderer;
 
 	void update();
 	void render();
