@@ -17,6 +17,7 @@ public:
 	void add_live_object(GameObject* obj);
 	std::vector<GameObject*>& get_renderable_objects();
 	std::vector<RenderableComponent*>& get_renderable_components();
+	virtual void setup() {}
 	void load();
 	void fixed_update();
 	void update();

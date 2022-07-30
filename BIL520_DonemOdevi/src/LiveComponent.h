@@ -1,7 +1,7 @@
 #pragma once
 #include "ObjectComponent.h"
 
-class LiveComponent : ObjectComponent {
+class LiveComponent : public ObjectComponent {
 public:
 	LiveComponent() {}
 	~LiveComponent() {}

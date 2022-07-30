@@ -29,26 +29,6 @@ GameObject& GameObject::instantiate_object(std::string name, glm::vec3 pos) {
 	return *obj;
 }
 
-template <class T>
-void GameObject::add_component(const T* component) {
-	components[typeid(T)] = component;
-	if (std::is_base_of<RenderableComponent, T>) {
-		renderable_components.push_back(component);
-	}
-	if (std::is_base_of<LiveComponent, T>) {
-		live_components.push_back(component);
-	}
-}
-
-template <class T>
-T* GameObject::get_component() {
-	auto& component = components.find(typeid(T));
-	if (component != components.end()) {
-		return component.second;
-	}
-	return NULL;
-}
-
 void GameObject::start() {
 	for (auto comp : components) {
 		comp.second->start();
@@ -93,7 +73,11 @@ std::string GameObject::get_name() {
 	return name;
 }
 
-std::unordered_map<id_t, ObjectComponent*>& GameObject::get_components() {
+Transform& GameObject::get_transform() {
+	return transform;
+}
+
+std::unordered_map<std::type_index, ObjectComponent*>& GameObject::get_components() {
 	return components;
 }
 

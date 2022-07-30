@@ -2,9 +2,9 @@
 #include "ObjectComponent.h"
 #include <vector>
 
-class RenderableComponent : ObjectComponent {
+class RenderableComponent : public ObjectComponent {
 public:
-	
-private:
-	
+	void bind() const { }
+	void unbind() const { }
+	virtual void draw() const { }
 };

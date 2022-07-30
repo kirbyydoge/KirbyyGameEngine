@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include <type_traits>
+#include <iostream>
 
 GameScene::GameScene(std::string name) {
 	this->name = name;
@@ -11,8 +12,8 @@ void GameScene::add_object(GameObject* obj) {
 }
 
 void GameScene::add_renderable(GameObject* obj) {
-	auto renderable_components = obj->get_renderable_components();
-	for (auto comp : renderable_components) {
+	auto obj_comps = obj->get_renderable_components();
+	for (auto comp : obj_comps) {
 		renderable_components.push_back(comp);
 	}
 	renderable_objects.push_back(obj);

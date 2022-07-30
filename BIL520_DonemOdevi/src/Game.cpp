@@ -7,10 +7,15 @@
 #include "Texture.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "GameScene.h"
+#include "BaseScene.h"
 
 #include <chrono>
 #include <thread>
 #include <iostream>
+
+#define ELAPSED_MILLIS(begin, end) (std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count())
+#define ELAPSED_MICROS(begin, end) (std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count())
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GL_CALL(x) gl_clear_errors();\
@@ -34,6 +39,8 @@ Game::Game(int width, int height, std::string window_name) {
 	game_window = nullptr;
 	renderer = nullptr;
 	is_running = false;
+	fps_goal = 60;
+	fixed_steps = 60;
 	if (!glfwInit()) {
 		std::cout << "Could not initialize GLFW." << std::endl;
 		return;
@@ -48,6 +55,7 @@ Game::Game(int width, int height, std::string window_name) {
 		return;
 	}
 	renderer = GameRenderer::get_renderer();
+	GameTime::set_fixed_delta_time((float)1 / fixed_steps);
 }
 
 Game::~Game() {
@@ -57,56 +65,33 @@ Game::~Game() {
 
 void Game::run() {
 	is_running = true;
-	Shader shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	float delta_time = 0;
-	float positions[] = {
-		-1.5f, -1.5f, 0.0f, 0.0f,
-		 1.5f, -1.5f, 1.0f, 0.0f,
-		 1.5f,  1.5f, 1.0f, 1.0f,
-		-1.5f,  1.5f, 0.0f, 1.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-	VertexArray va;
-	VertexBuffer vb(positions, 4 * 4 * sizeof(float));
-	IndexBuffer ib(indices, 6);
-	VertexBufferAttributes vba;
-	Texture texture("res/textures/amogus.png");
-	Texture texture_temp("res/textures/3dsaulgoodman.png");
-	vba.push<float>(2);
-	vba.push<float>(2);
-	va.add_buffer(vb, vba);
-	std::pair<int, int> window_sizes = GameWindow::get_size(game_window);
-	float aspect_ratio = (float)window_sizes.first / window_sizes.second;
-	float proj_height = 1.5f;
-	float proj_width = proj_height * aspect_ratio;
-	glm::mat4 proj = glm::ortho(-proj_width, proj_width, -proj_height, proj_height, -1.0f, 1.0f);
-	float red = 0.0f;
-	float inc = 0.05f;
+	BaseScene* base = new BaseScene("TestScene");
+	base->setup();
+	scene_manager.load_scene(base);
+	std::chrono::steady_clock::time_point begin;
+	std::chrono::steady_clock::time_point end;
+	begin = std::chrono::steady_clock::now();
+	end = std::chrono::steady_clock::now();
+	unsigned long long int frame_time = 0;
+	unsigned long long int frame_goal = (float)1000000 / fps_goal;
+	unsigned long long int fixed_time = (float)1000000 / fixed_steps;
+	unsigned long long int fixed_bank = 0;
 	while (!glfwWindowShouldClose(game_window) && is_running) {
-		// update(); <temp section>
-		if (red > 1.0f) {
-			inc = -0.05f;
+		unsigned long long int us_delta_time = ELAPSED_MICROS(begin, end);
+		GameTime::set_delta_time((float)us_delta_time / 1000000);
+		fixed_bank += us_delta_time;
+		begin = std::chrono::steady_clock::now();
+		while (fixed_bank > fixed_time) {
+			fixed_update();
+			fixed_bank -= fixed_time;
 		}
-		else if (red < 0.0f) {
-			inc = 0.05f;
+		update();
+		render();
+		frame_time = ELAPSED_MICROS(begin, std::chrono::steady_clock::now());
+		if (frame_time < frame_goal) {
+			std::this_thread::sleep_until(begin + std::chrono::microseconds(frame_goal));
 		}
-		red += inc;
-		// render(); <temp section>
-		renderer->clear();
-		texture_temp.bind(1);
-		shader.set_uniform<int>("u_texture", 1);
-		shader.set_uniform_matrix<glm::mat4>("u_model_proj", proj);
-		renderer->draw(va, ib, shader);
-		texture.bind(0);
-		shader.set_uniform<int>("u_texture", 0);
-		shader.set_uniform_matrix<glm::mat4>("u_model_proj", proj);
-		renderer->draw(va, ib, shader);
-		glfwSwapBuffers(game_window);
-		glfwPollEvents();
-		//std::this_thread::sleep_for(std::chrono::milliseconds(15));
+		end = std::chrono::steady_clock::now();
 	}
 }
 
@@ -114,10 +99,14 @@ GLFWwindow* Game::get_game_window() {
 	return game_window;
 }
 
+void Game::fixed_update() {
+	scene_manager.get_active_scene()->fixed_update();
+}
+
 void Game::update() {
 	scene_manager.get_active_scene()->update();
 }
 
 void Game::render() {
-	renderer->render_scene(*scene_manager.get_active_scene());
+	renderer->render_scene(scene_manager.get_active_scene(), game_window);
 }

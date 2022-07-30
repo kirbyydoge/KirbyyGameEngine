@@ -54,7 +54,9 @@
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\LiveComponent.h" />
     <ClInclude Include="src\ObjectComponent.h" />
+    <ClInclude Include="src\PlayerMovement.h" />
     <ClInclude Include="src\RenderableComponent.h" />
+    <ClInclude Include="src\SaulGoodman.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Sprite.h" />

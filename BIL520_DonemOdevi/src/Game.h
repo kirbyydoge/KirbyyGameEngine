@@ -13,11 +13,13 @@ public:
 	void run();
 	GLFWwindow* get_game_window();
 private:
+	unsigned int fps_goal;
+	unsigned int fixed_steps;
 	bool is_running;
 	GLFWwindow* game_window;
 	SceneManager scene_manager;
 	GameRenderer* renderer;
-
+	void fixed_update();
 	void update();
 	void render();
 };

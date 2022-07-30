@@ -8,7 +8,7 @@
 class GameRenderer {
 public:
 	static GameRenderer* get_renderer();
-	void render_scene(GameScene &scene) const;
+	void render_scene(GameScene* scene, GLFWwindow* window) const;
 	void clear() const;
 	void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 private:
