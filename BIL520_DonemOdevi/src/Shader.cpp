@@ -1,24 +1,27 @@
 #include "Shader.h"
 
 #include <GL/glew.h>
+#include "glm/glm.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 Shader::Shader(const std::string& path_vs, const std::string& path_fs) {
-	std::string vs = Shader::read_shader_file(path_vs);
-	std::string fs = Shader::read_shader_file(path_fs);
-	id = Shader::create_shader_program(vs, fs);
+	std::string vs = read_shader_file(path_vs);
+	std::string fs = read_shader_file(path_fs);
+	id = create_shader_program(vs, fs);
 }
 
-Shader::~Shader() {}
+Shader::~Shader() {
+	glDeleteShader(id);
+}
 
-void Shader::use() {
+void Shader::use() const {
 	glUseProgram(id);
 }
 
-void Shader::release() {
+void Shader::release() const {
 	glUseProgram(0);
 }
 
@@ -65,4 +68,47 @@ std::string Shader::read_shader_file(const std::string& path) {
 	}
 	program << program_file.rdbuf();
 	return program.str();
+}
+
+template <typename T>
+void Shader::set_uniform(const std::string& name, const T value) {
+	static_assert(false);
+}
+
+template <>
+void Shader::set_uniform<glm::vec4>(const std::string& name, const glm::vec4 value) {
+	glUniform4f(get_uniform_location(name), value.x, value.y, value.z, value.w);
+}
+
+template <>
+void Shader::set_uniform<glm::vec3>(const std::string& name, const glm::vec3 value) {
+	glUniform3f(get_uniform_location(name), value.x, value.y, value.z);
+}
+
+template <>
+void Shader::set_uniform<glm::vec2>(const std::string& name, const glm::vec2 value) {
+	glUniform2f(get_uniform_location(name), value.x, value.y);
+}
+
+template <>
+void Shader::set_uniform<float>(const std::string& name, const float value) {
+	glUniform1f(get_uniform_location(name), value);
+}
+
+template <>
+void Shader::set_uniform<int>(const std::string& name, const int value) {
+	glUniform1i(get_uniform_location(name), value);
+}
+
+int Shader::get_uniform_location(const std::string& name) {
+	auto search = uloc_cache.find(name);
+	if (search != uloc_cache.end()) {
+		return search->second;
+	}
+	int loc = glGetUniformLocation(id, name.c_str());
+	if (loc == -1) {
+		std::cout << "WARN: No such uniform (" << name << ")" << std::endl;
+	}
+	uloc_cache[name] = loc;
+	return loc;
 }

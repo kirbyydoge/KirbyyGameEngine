@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
+#include "Texture.h"
 
 #include <chrono>
 #include <thread>
@@ -55,36 +56,31 @@ Game::~Game() {
 
 void Game::run() {
 	is_running = true;
-	Shader program("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	unsigned int loc_color = glGetUniformLocation(program.id, "u_color");
+	Shader shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
 	float delta_time = 0;
 	float positions[] = {
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.5f,  0.5f,
-		-0.5f,  0.5f
+		-0.5f, -0.5f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 1.0f, 0.0f,
+		 0.5f,  0.5f, 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f
 	};
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
 	};
 	VertexArray va;
-	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+	VertexBuffer vb(positions, 4 * 4 * sizeof(float));
 	IndexBuffer ib(indices, 6);
 	VertexBufferAttributes vba;
+	Texture texture("res/textures/3dsaulgoodman.png");
+	texture.bind();
+	vba.push<float>(2);
 	vba.push<float>(2);
 	va.add_buffer(vb, vba);
 	float red = 0.0f;
 	float inc = 0.05f;
 	while (is_running) {
-		// update();
-		// render();
-		glClear(GL_COLOR_BUFFER_BIT);
-		program.use();
-		glUniform4f(loc_color, red, 0.3f, 0.8f, 1.0f);
-		va.bind();
-		ib.bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		// update(); <temp section>
 		if (red > 1.0f) {
 			inc = -0.05f;
 		}
@@ -92,6 +88,11 @@ void Game::run() {
 			inc = 0.05f;
 		}
 		red += inc;
+		// render(); <temp section>
+		renderer->clear();
+		shader.set_uniform<glm::vec4>("u_color", glm::vec4{red, 0.3f, 0.8f, 1.0f});
+		shader.set_uniform<int>("u_texture", 0);
+		renderer->draw(va, ib, shader);
 		glfwSwapBuffers(game_window);
 		glfwPollEvents();
 		//std::this_thread::sleep_for(std::chrono::milliseconds(15));
@@ -107,5 +108,5 @@ void Game::update() {
 }
 
 void Game::render() {
-	renderer->render(*scene_manager.get_active_scene());
+	renderer->render_scene(*scene_manager.get_active_scene());
 }

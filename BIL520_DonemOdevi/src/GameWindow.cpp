@@ -12,6 +12,8 @@ GLFWwindow* GameWindow::create_window(int width, int height, std::string window_
 	if (glewInit() != GLEW_OK) {
 		std::cout << "ERR: Could not initalize GLEW." << std::endl;
 	}
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (!window) {
 		std::cout << "ERR: Could not initialize game window." << std::endl;
 		return nullptr;
