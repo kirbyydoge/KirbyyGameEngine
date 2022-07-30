@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\3dsaulgoodman.png" />
+    <Image Include="res\textures\amogus.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

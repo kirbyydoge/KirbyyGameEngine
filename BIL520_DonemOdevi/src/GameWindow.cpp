@@ -1,5 +1,9 @@
 #include "GameWindow.h"
 
+void window_resize_event(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
 GLFWwindow* GameWindow::create_window(int width, int height, std::string window_name) {
 	GLFWwindow* window;
 	if (!glfwInit()) {
@@ -14,6 +18,8 @@ GLFWwindow* GameWindow::create_window(int width, int height, std::string window_
 	}
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glViewport(0, 0, width, height);
+	glfwSetWindowSizeCallback(window, window_resize_event);
 	if (!window) {
 		std::cout << "ERR: Could not initialize game window." << std::endl;
 		return nullptr;

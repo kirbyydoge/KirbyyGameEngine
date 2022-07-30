@@ -75,6 +75,16 @@ void Shader::set_uniform(const std::string& name, const T value) {
 	static_assert(false);
 }
 
+template<typename T>
+void Shader::set_uniform_matrix(const std::string& name, const T& value) {
+	static_assert(false);
+}
+
+template <>
+void Shader::set_uniform_matrix<glm::mat4>(const std::string& name, const glm::mat4& value) {
+	glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &value[0][0]);
+}
+
 template <>
 void Shader::set_uniform<glm::vec4>(const std::string& name, const glm::vec4 value) {
 	glUniform4f(get_uniform_location(name), value.x, value.y, value.z, value.w);

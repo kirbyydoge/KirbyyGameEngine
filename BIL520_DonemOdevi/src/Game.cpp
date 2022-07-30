@@ -1,11 +1,12 @@
 #include "Game.h"
 #include "GameTime.h"
 #include "GameWindow.h"
-
 #include "Shader.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Texture.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 #include <chrono>
 #include <thread>
@@ -59,10 +60,10 @@ void Game::run() {
 	Shader shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
 	float delta_time = 0;
 	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f
+		-1.5f, -1.5f, 0.0f, 0.0f,
+		 1.5f, -1.5f, 1.0f, 0.0f,
+		 1.5f,  1.5f, 1.0f, 1.0f,
+		-1.5f,  1.5f, 0.0f, 1.0f
 	};
 	unsigned int indices[] = {
 		0, 1, 2,
@@ -72,14 +73,19 @@ void Game::run() {
 	VertexBuffer vb(positions, 4 * 4 * sizeof(float));
 	IndexBuffer ib(indices, 6);
 	VertexBufferAttributes vba;
-	Texture texture("res/textures/3dsaulgoodman.png");
-	texture.bind();
+	Texture texture("res/textures/amogus.png");
+	Texture texture_temp("res/textures/3dsaulgoodman.png");
 	vba.push<float>(2);
 	vba.push<float>(2);
 	va.add_buffer(vb, vba);
+	std::pair<int, int> window_sizes = GameWindow::get_size(game_window);
+	float aspect_ratio = (float)window_sizes.first / window_sizes.second;
+	float proj_height = 1.5f;
+	float proj_width = proj_height * aspect_ratio;
+	glm::mat4 proj = glm::ortho(-proj_width, proj_width, -proj_height, proj_height, -1.0f, 1.0f);
 	float red = 0.0f;
 	float inc = 0.05f;
-	while (is_running) {
+	while (!glfwWindowShouldClose(game_window) && is_running) {
 		// update(); <temp section>
 		if (red > 1.0f) {
 			inc = -0.05f;
@@ -90,8 +96,13 @@ void Game::run() {
 		red += inc;
 		// render(); <temp section>
 		renderer->clear();
-		shader.set_uniform<glm::vec4>("u_color", glm::vec4{red, 0.3f, 0.8f, 1.0f});
+		texture_temp.bind(1);
+		shader.set_uniform<int>("u_texture", 1);
+		shader.set_uniform_matrix<glm::mat4>("u_model_proj", proj);
+		renderer->draw(va, ib, shader);
+		texture.bind(0);
 		shader.set_uniform<int>("u_texture", 0);
+		shader.set_uniform_matrix<glm::mat4>("u_model_proj", proj);
 		renderer->draw(va, ib, shader);
 		glfwSwapBuffers(game_window);
 		glfwPollEvents();

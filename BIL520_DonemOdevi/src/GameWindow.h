@@ -5,10 +5,12 @@
 #include <iostream>
 #include <utility>
 
+void window_resize_event(GLFWwindow* window, int width, int height);
+
 class GameWindow {
 public:
 	static GLFWwindow* create_window(int width, int height, std::string window_name);
-	std::pair<int, int> get_size(GLFWwindow* window);
+	static std::pair<int, int> get_size(GLFWwindow* window);
 	static int get_width(GLFWwindow* window);
 	static int get_height(GLFWwindow* window);
 };

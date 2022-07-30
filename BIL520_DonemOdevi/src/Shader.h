@@ -12,6 +12,8 @@ public:
 	void release() const;
 	template <typename T>
 	void set_uniform(const std::string& name, const T value);
+	template <typename T>
+	void set_uniform_matrix(const std::string& name, const T& value);
 private:
 	unsigned int id;
 	std::unordered_map<std::string, int> uloc_cache;

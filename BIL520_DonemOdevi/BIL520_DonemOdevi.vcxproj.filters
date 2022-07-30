@@ -164,5 +164,8 @@
     <Image Include="res\textures\3dsaulgoodman.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\amogus.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
