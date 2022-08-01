@@ -39,8 +39,8 @@ Game::Game(int width, int height, std::string window_name) {
 	game_window = nullptr;
 	renderer = nullptr;
 	is_running = false;
-	fps_goal = 60;
-	fixed_steps = 60;
+	fps_goal = 165;
+	fixed_steps = 50;
 	if (!glfwInit()) {
 		std::cout << "Could not initialize GLFW." << std::endl;
 		return;

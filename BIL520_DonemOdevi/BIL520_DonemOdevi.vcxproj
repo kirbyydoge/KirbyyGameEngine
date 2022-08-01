@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BaseScene.cpp" />
+    <ClCompile Include="src\Box2D.cpp" />
+    <ClCompile Include="src\Collider2D.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameInput.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
@@ -43,6 +45,9 @@
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\BaseScene.h" />
+    <ClInclude Include="src\Bounds2D.h" />
+    <ClInclude Include="src\Box2D.h" />
+    <ClInclude Include="src\Collider2D.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameInput.h" />
     <ClInclude Include="src\GameObject.h" />

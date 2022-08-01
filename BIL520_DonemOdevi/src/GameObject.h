@@ -4,6 +4,7 @@
 #include "RenderableComponent.h"
 #include "Transform.h"
 #include "glm_extended.h"
+#include "Collider2D.h"
 
 #include <utility>
 #include <typeinfo>
@@ -25,6 +26,7 @@ public:
 	void update();
 	void late_update();
 	void stop();
+	void on_collision(Collider2D* other);
 	id_t get_id();
 	std::string get_name();
 	Transform& get_transform();

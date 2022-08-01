@@ -9,4 +9,5 @@ public:
 	virtual void early_update() {}
 	virtual void update() {}
 	virtual void late_update() {}
+	virtual void on_collision(Collider2D* other) {}
 };

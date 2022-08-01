@@ -65,6 +65,12 @@ void GameObject::stop() {
 	}
 }
 
+void GameObject::on_collision(Collider2D* other) {
+	for (auto& comp : components) {
+		comp.second->on_collision(other);
+	}
+}
+
 id_t GameObject::get_id() {
 	return id;
 }
