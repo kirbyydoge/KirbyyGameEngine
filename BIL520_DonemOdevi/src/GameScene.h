@@ -38,7 +38,8 @@ public:
 	void fixed_update();
 	void update();
 	void destroy();
-	std::vector<RayInfo> raycast(glm::vec3 from, glm::vec3 to, float distance);
+	std::vector<RayInfo> raycast(glm::vec3 origin, glm::vec3 direction, float distance);
+	RayInfo raycast_closest(GameObject* ignore, glm::vec3 origin, glm::vec3 direction, float distance);
 	RayInfo check_ray(Collider2D* obj, glm::vec3 origin, glm::vec3 dir, float distance);
 private:
 	std::string name;

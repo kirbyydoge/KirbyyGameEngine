@@ -11,6 +11,8 @@ class Sprite : public RenderableComponent {
 public:
 	Sprite(unsigned int tex_count = 1);
 	~Sprite();
+	static Sprite* make_sprite(std::string& path, float dimx, float dimy);
+	static Sprite* make_sprite(std::string& path, int frame_count, float dimx, float dimy);
 	void set_projection(glm::mat4* proj);
 	void set_shader(Shader* shader);
 	Shader& get_shader();

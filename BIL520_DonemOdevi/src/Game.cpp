@@ -54,6 +54,7 @@ Game::Game(int width, int height, std::string window_name) {
 		std::cout << "Could not create game window." << std::endl;
 		return;
 	}
+	glEnable(GL_DEPTH_TEST);
 	renderer = GameRenderer::get_renderer();
 	GameTime::set_fixed_delta_time((float)1 / fixed_steps);
 }

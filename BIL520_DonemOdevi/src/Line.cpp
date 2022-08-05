@@ -14,10 +14,14 @@ Line::Line() {
 	int ibuffer[2] = { 0, 1 };
 	vba.push<float>(2);
 	va->add_buffer(*vb, vba);
-	id = 0;
 }
 
-Line::~Line() {}
+Line::~Line() {
+	delete sh;
+	delete va;
+	delete vb;
+	delete ib;
+}
 
 void Line::set_pos(const glm::vec3 start, const glm::vec3 end) {
 	float vbuffer[] = { start.x, start.y, end.x, end.y };

@@ -12,6 +12,7 @@
 #include <string>
 #include <unordered_map>
 #include <iostream>
+#include "GameTags.h"
 
 typedef uint64_t id_t;
 
@@ -19,8 +20,10 @@ class GameScene;
 
 class GameObject {
 public:
-	static GameObject& instantiate_object(GameScene* scene, std::string name);
-	static GameObject& instantiate_object(GameScene* scene, std::string name, glm::vec3 pos);
+	static GameObject& instantiate_object(GameScene* scene, std::string name,
+		GameObjectTag tag = GameObjectTag::UNDEFINED);
+	static GameObject& instantiate_object(GameScene* scene, std::string name, 
+		glm::vec3 pos, GameObjectTag tag = GameObjectTag::UNDEFINED);
 	~GameObject();
 	void start();
 	void fixed_update();
@@ -30,6 +33,7 @@ public:
 	void stop();
 	void on_collision(Collider2D* other);
 	id_t get_id();
+	GameObjectTag get_tag();
 	std::string get_name();
 	GameScene* get_scene();
 	Transform& get_transform();
@@ -53,6 +57,7 @@ public:
 		return nullptr;
 	}
 private:
+	GameObjectTag tag;
 	static id_t id_ctr;
 	static std::unordered_map<id_t, GameObject*> objects;
 	GameScene* scene;

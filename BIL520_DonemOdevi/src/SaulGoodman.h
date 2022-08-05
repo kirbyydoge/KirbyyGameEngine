@@ -7,8 +7,9 @@
 
 class SaulGoodman : public LiveComponent {
 public:
-	SaulGoodman(std::vector<std::pair<std::string, int>> anims) {
+	SaulGoodman(std::vector<std::pair<std::string, int>> anims, float dims) {
 		this->anims = anims;
+		this->dims = dims;
 	}
 	virtual void start() override {
 		base = this->get_base();
@@ -17,7 +18,9 @@ public:
 		sprites = new Sprite*[anims.size()];
 		for (int i = 0; i < anims.size(); i++) {
 			std::pair<std::string, int> anim = anims[i];
-			sprites[i] = make_sprite(anim.first, anim.second);
+			std::string name = anim.first;
+			int frame_count = anim.second;
+			sprites[i] = Sprite::make_sprite(name, frame_count, dims, dims);
 		}
 		set_sprite(0);
 	}
@@ -43,6 +46,7 @@ public:
 		counter = 0;
 	}
 private:
+	float dims;
 	std::vector<std::pair<std::string, int>> anims;
 	GameObject* base;
 	GameScene* scene;
@@ -50,35 +54,4 @@ private:
 	int active_sprite;
 	float counter;
 	float change_freq = 0.033f;
-
-	Sprite* make_sprite(std::string path, int frame_count) {
-		float positions[] = {
-			-1.0f, -1.0f, 0.0f, 0.0f,
-			 1.0f, -1.0f, 1.0f, 0.0f,
-			 1.0f,  1.0f, 1.0f, 1.0f,
-			-1.0f,  1.0f, 0.0f, 1.0f
-		};
-		unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0
-		};
-		base = this->get_base();
-		Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-		Sprite* sprite = new Sprite(frame_count);
-		for (int i = 0; i < frame_count; i++) {
-			sprite->set_texture(path + std::to_string((i + 1)) + ".jpg", i);
-		}
-		VertexArray* va = new VertexArray;
-		VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-		IndexBuffer* ib = new IndexBuffer(indices, 6);
-		VertexBufferAttributes vba;
-		vba.push<float>(2);
-		vba.push<float>(2);
-		va->add_buffer(*vb, vba);
-		sprite->set_shader(shader);
-		sprite->set_vertex_array(va);
-		sprite->set_index_buffer(ib);
-		sprite->set_projection(&Camera::proj);
-		return sprite;
-	}
 };

@@ -16,43 +16,17 @@
 #include "Camera.h"
 
 void player_setup(BaseScene* scene) {
-	float positions[] = {
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		 1.0f, -1.0f, 1.0f, 0.0f,
-		 1.0f,  1.0f, 1.0f, 1.0f,
-		-1.0f,  1.0f, 0.0f, 1.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	GameObject* player = &GameObject::instantiate_object(scene, "Player", glm_ext::new_vec3(0, 0, 0));
-	int frame_count = 449;
-	Sprite* player_sprite = new Sprite(frame_count);
-	for (int i = 0; i < frame_count; i++) {
-		player_sprite->set_texture("res/animations/sadabdulhamid/" + std::to_string((i + 1)) + ".jpg", i);
-	}
-	VertexArray* va = new VertexArray;
-	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-	IndexBuffer* ib = new IndexBuffer(indices, 6);
-	VertexBufferAttributes vba;
-	vba.push<float>(2);
-	vba.push<float>(2);
-	va->add_buffer(*vb, vba);
-	player_sprite->set_shader(shader);
-	player_sprite->set_vertex_array(va);
-	player_sprite->set_index_buffer(ib);
-	player_sprite->set_projection(&Camera::proj);
-	std::vector<std::pair<std::string, int>> anims;
-	anims.push_back(std::make_pair<std::string, int>("res/animations/sadabdulhamid/", 449));
-	player->add_component<Sprite>(player_sprite);
+	float dims = 1.5f;
+	std::string path = "res/textures/amogus.png";
+	GameObject* player = &GameObject::instantiate_object(scene, "Player", glm_ext::new_vec3(0, 0, -0.4f), 
+															GameObjectTag::PLAYER);
 	player->add_component<PlayerMovement>(new PlayerMovement);
-	player->add_component<SaulGoodman>(new SaulGoodman(anims));
+	Sprite* sprite = Sprite::make_sprite(path, dims, dims);
+	player->add_component<Sprite>(sprite);
 	player->add_component<Collider2D>(
 		new Collider2D(
 			Collider2DType::BoxCollider2D,
-			new Box2D(&player->get_transform(), 2.0f, 2.0f),
+			new Box2D(&player->get_transform(),dims , dims),
 			false,
 			false
 		)
@@ -68,59 +42,16 @@ void player_setup(BaseScene* scene) {
 	scene->add_collider2D(player->get_component<Collider2D>());
 }
 
-void background_setup(BaseScene* scene) {
-	/*
-	float positions[] = {
-		-10.0f, -7.5f, 0.0f, 0.0f,
-		 10.0f, -7.5f, 1.0f, 0.0f,
-		 10.0f,  7.5f, 1.0f, 1.0f,
-		-10.0f,  7.5f, 0.0f, 1.0f
-	};
-	*/
-	float positions[] = {
-		-10.0f, -7.5f, 0.0f, 0.0f,
-		 10.0f, -7.5f, 1.0f, 0.0f,
-		 10.0f,  7.5f, 1.0f, 1.0f,
-		-10.0f,  7.5f, 0.0f, 1.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	GameObject* background = &GameObject::instantiate_object(scene, "Background", glm_ext::new_vec3(0, 0, 0));
-	int frame_count = 465;
-	Sprite* player_sprite = new Sprite(frame_count);
-	for (int i = 0; i < frame_count; i++) {
-		player_sprite->set_texture("res/animations/3dsaulgoodman/" + std::to_string((i+1)) + ".jpg", i);
-	}
-	VertexArray* va = new VertexArray;
-	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-	IndexBuffer* ib = new IndexBuffer(indices, 6);
-	VertexBufferAttributes vba;
-	vba.push<float>(2);
-	vba.push<float>(2);
-	va->add_buffer(*vb, vba);
-	player_sprite->set_shader(shader);
-	player_sprite->set_vertex_array(va);
-	player_sprite->set_index_buffer(ib);
-	player_sprite->set_projection(&Camera::proj);
-	background->add_component<Sprite>(player_sprite);
-	scene->add_object(background);
-	scene->add_renderable_object(background);
-	scene->add_live_object(background);
-}
-
-void add_wall(BaseScene* scene, glm::vec3 center) {
-	GameObject* wall = &GameObject::instantiate_object(scene, "Wall", center);
+void target_setup(BaseScene* scene, glm::vec3 center, float dims) {
+	std::string path = "res/textures/amogus.png";
+	GameObject* wall = &GameObject::instantiate_object(scene, "Target", center, GameObjectTag::TARGET);
 	std::vector<std::pair<std::string, int>> anims;
-	anims.push_back(std::make_pair<std::string, int>("res/animations/bettercallsaul/", 65));
-	anims.push_back(std::make_pair<std::string, int>("res/animations/3dsaulgoodman/", 465));
-	wall->add_component<SaulGoodman>(new SaulGoodman(anims));
+	Sprite* tg_sprite = Sprite::make_sprite(path, dims, dims);
+	wall->add_component<Sprite>(tg_sprite);
 	wall->add_component<Collider2D>(
 		new Collider2D(
 			Collider2DType::BoxCollider2D,
-			new Box2D(&wall->get_transform(), 2.0f, 2.0f),
+			new Box2D(&wall->get_transform(), dims * 0.6, dims * 0.6),
 			false,
 			true
 		)
@@ -131,12 +62,68 @@ void add_wall(BaseScene* scene, glm::vec3 center) {
 	scene->add_collider2D(wall->get_component<Collider2D>());
 }
 
+void background_setup(BaseScene* scene, glm::vec3 center) {
+	std::string path = "res/textures/ground.png";
+	GameObject* background = &GameObject::instantiate_object(scene, "Background", center,
+									GameObjectTag::UNDEFINED);
+	Sprite* bg_sprite = Sprite::make_sprite(path, 20.0f, 16.0f);
+	background->add_component<Sprite>(bg_sprite);
+	scene->add_object(background);
+	scene->add_renderable_object(background);
+}
+
+void add_wall(BaseScene* scene, glm::vec3 center, float dims) {
+	std::string path = "res/textures/wall.jpg";
+	GameObject* wall = &GameObject::instantiate_object(scene, "Wall", center,
+															GameObjectTag::OBSTACLE);
+	std::vector<std::pair<std::string, int>> anims;
+	Sprite* bg_sprite = Sprite::make_sprite(path, dims, dims);
+	wall->add_component<Sprite>(bg_sprite);
+	wall->add_component<Collider2D>(
+		new Collider2D(
+			Collider2DType::BoxCollider2D,
+			new Box2D(&wall->get_transform(), dims, dims),
+			false,
+			true
+		)
+	);
+	scene->add_object(wall);
+	scene->add_renderable_object(wall);
+	scene->add_live_object(wall);
+	scene->add_collider2D(wall->get_component<Collider2D>());
+}
+
+void make_map(BaseScene* scene, int* map, int dim_x, int dim_y, float width, float height) {
+	for (int i = 0; i < dim_y; i++) {
+		for (int j = 0; j < dim_x; j++) {
+			if (map[i * dim_x + j] == 1) {
+				float x = (j - dim_x / 2) * width + width / 2;
+				float y = -(i - dim_y / 2) * height - height / 2;
+				add_wall(scene, glm::vec3(x, y, 0), width);
+			}
+			if (map[i * dim_x + j] == 2) {
+				float x = (j - dim_x / 2) * width + width / 2;
+				float y = -(i - dim_y / 2) * height - height / 2;
+				target_setup(scene, glm::vec3(x, y, 0), 1.0f);
+			}
+		}
+	}
+}
+
 void BaseScene::setup() {
-	//background_setup(this);
-	Camera::proj = glm::ortho(-10.0f, 10.0f, -7.5f, 7.5f, -1.0f, 1.0f);
-	add_wall(this, glm::vec3(-2, -2, 0));
-	add_wall(this, glm::vec3(2, -2, 0));
-	add_wall(this, glm::vec3(-2, 2, 0));
-	add_wall(this, glm::vec3(2, 2, 0));
+	Camera::proj = glm::ortho(-10.0f, 10.0f, -8.0f, 8.0f, -1.0f, 1.0f);
+	background_setup(this, glm::vec3(0, 0, -0.5));
+	int map[] = {
+		1,2,1,0,0,0,0,1,1,0,
+		1,0,0,0,1,0,0,0,0,1,
+		0,0,0,1,1,1,0,1,0,0,
+		0,0,1,0,0,0,0,2,1,0,
+		0,1,1,0,0,0,0,1,0,0,
+		0,1,0,0,0,0,0,0,0,0,
+		0,1,0,1,0,1,1,1,1,0,
+		0,0,0,1,0,1,2,0,0,0
+	};
+	add_wall(this, glm::vec3(-1, -1, 0), 0.5f);
+	make_map(this, map, 10, 8, 2.0f, 2.0f);
 	player_setup(this);
 }

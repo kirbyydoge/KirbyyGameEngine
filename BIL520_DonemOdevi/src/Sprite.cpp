@@ -3,6 +3,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "GameRenderer.h"
 #include "GameObject.h"
+#include "Camera.h"
 
 Sprite::Sprite(unsigned int tex_count) {
 	this->tex_count = tex_count;
@@ -17,6 +18,64 @@ Sprite::Sprite(unsigned int tex_count) {
 
 Sprite::~Sprite() {
 	delete textures;
+}
+
+Sprite* Sprite::make_sprite(std::string& path, float dimx, float dimy) {
+	float positions[] = {
+		-dimx / 2, -dimy / 2, 0.0f, 0.0f,
+		 dimx / 2, -dimy / 2, 1.0f, 0.0f,
+		 dimx / 2,  dimy / 2, 1.0f, 1.0f,
+		-dimx / 2,  dimy / 2, 0.0f, 1.0f
+	};
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
+	Sprite* sprite = new Sprite(1);
+	sprite->set_texture(path, 0);
+	VertexArray* va = new VertexArray;
+	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
+	VertexBufferAttributes vba;
+	vba.push<float>(2);
+	vba.push<float>(2);
+	va->add_buffer(*vb, vba);
+	sprite->set_shader(shader);
+	sprite->set_vertex_array(va);
+	sprite->set_index_buffer(ib);
+	sprite->set_projection(&Camera::proj);
+	return sprite;
+}
+
+Sprite* Sprite::make_sprite(std::string& path, int frame_count, float dimx, float dimy) {
+	float positions[] = {
+		-dimx / 2, -dimy / 2, 0.0f, 0.0f,
+		 dimx / 2, -dimy / 2, 1.0f, 0.0f,
+		 dimx / 2,  dimy / 2, 1.0f, 1.0f,
+		-dimx / 2,  dimy / 2, 0.0f, 1.0f
+	};
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
+	Sprite* sprite = new Sprite(frame_count);
+	for (int i = 0; i < frame_count; i++) {
+		sprite->set_texture(path + std::to_string((i + 1)) + ".jpg", i);
+	}
+	VertexArray* va = new VertexArray;
+	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
+	VertexBufferAttributes vba;
+	vba.push<float>(2);
+	vba.push<float>(2);
+	va->add_buffer(*vb, vba);
+	sprite->set_shader(shader);
+	sprite->set_vertex_array(va);
+	sprite->set_index_buffer(ib);
+	sprite->set_projection(&Camera::proj);
+	return sprite;
 }
 
 void Sprite::set_projection(glm::mat4* proj) {

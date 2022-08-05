@@ -96,6 +96,9 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mesh2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h">
@@ -191,12 +194,20 @@
     <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mesh2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameTags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vshader.glsl" />
     <None Include="res\shaders\fshader.glsl" />
     <None Include="res\shaders\linefshader.glsl" />
     <None Include="res\shaders\linevshader.glsl" />
+    <None Include="res\shaders\mesh2dfshader.glsl" />
+    <None Include="res\shaders\mesh2dvshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\3dsaulgoodman.png">

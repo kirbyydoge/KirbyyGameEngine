@@ -14,20 +14,22 @@ GameObject::GameObject(id_t id, std::string name, glm::vec3 pos) {
 	transform.set_rotation(glm_ext::new_vec3(0.f, 0.f, 0.f));
 }
 
-GameObject::~GameObject() {
+GameObject::~GameObject() {}
 
-}
-
-GameObject& GameObject::instantiate_object(GameScene* scene, std::string name) {
+GameObject& GameObject::instantiate_object(GameScene* scene, std::string name,
+		GameObjectTag tag) {
 	GameObject* obj = new GameObject(GameObject::id_ctr, name, glm_ext::new_vec3(0.f, 0.f, 0.f));
 	obj->scene = scene;
+	obj->tag = tag;
 	GameObject::objects[GameObject::id_ctr++] = obj;
 	return *obj;
 }
 
-GameObject& GameObject::instantiate_object(GameScene* scene, std::string name, glm::vec3 pos) {
+GameObject& GameObject::instantiate_object(GameScene* scene, std::string name, glm::vec3 pos,
+		GameObjectTag tag) {
 	GameObject* obj = new GameObject(GameObject::id_ctr, name, pos);
 	obj->scene = scene;
+	obj->tag = tag;
 	GameObject::objects[GameObject::id_ctr++] = obj;
 	return *obj;
 }
@@ -76,6 +78,10 @@ void GameObject::on_collision(Collider2D* other) {
 
 id_t GameObject::get_id() {
 	return id;
+}
+
+GameObjectTag GameObject::get_tag() {
+	return tag;
 }
 
 std::string GameObject::get_name() {

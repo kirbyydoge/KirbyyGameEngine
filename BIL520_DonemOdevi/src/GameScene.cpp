@@ -152,3 +152,22 @@ std::vector<RayInfo> GameScene::raycast(glm::vec3 origin, glm::vec3 dir, float d
 	}
 	return collisions;
 }
+ 
+RayInfo GameScene::raycast_closest(GameObject* ignore, glm::vec3 origin, glm::vec3 dir, float distance) {
+	RayInfo closest;
+	closest.hit = nullptr;
+	closest.direction = dir;
+	closest.origin = origin;
+	for (auto obj : collision2D_components) {
+		if (obj->get_base() == ignore) {
+			continue;
+		}
+		RayInfo check = check_ray(obj, origin, dir, distance);
+		if (check.hit) {
+			if (!closest.hit || check.t < closest.t) {
+				closest = check;
+			}
+		}
+	}
+	return closest;
+}

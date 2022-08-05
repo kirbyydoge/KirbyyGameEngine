@@ -12,6 +12,12 @@ IndexBuffer::~IndexBuffer() {
 	glDeleteBuffers(1, &id);
 }
 
+void IndexBuffer::set_indices(const unsigned int* data, unsigned int count) {
+	bind();
+	this->count = count;
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+}
+
 void IndexBuffer::bind() const  {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 }
