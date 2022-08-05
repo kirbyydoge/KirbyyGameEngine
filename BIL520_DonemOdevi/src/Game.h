@@ -12,6 +12,7 @@ public:
 	~Game();
 	void run();
 	GLFWwindow* get_game_window();
+	GameScene* get_active_scene();
 private:
 	unsigned int fps_goal;
 	unsigned int fixed_steps;

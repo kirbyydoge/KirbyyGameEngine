@@ -18,3 +18,8 @@ void VertexBuffer::bind() const {
 void VertexBuffer::unbind() const {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+void VertexBuffer::set_data(const void* data, unsigned int size) {
+	bind();
+	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+}

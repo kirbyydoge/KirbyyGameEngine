@@ -15,10 +15,12 @@
 
 typedef uint64_t id_t;
 
+class GameScene;
+
 class GameObject {
 public:
-	static GameObject& instantiate_object(std::string name);
-	static GameObject& instantiate_object(std::string name, glm::vec3 pos);
+	static GameObject& instantiate_object(GameScene* scene, std::string name);
+	static GameObject& instantiate_object(GameScene* scene, std::string name, glm::vec3 pos);
 	~GameObject();
 	void start();
 	void fixed_update();
@@ -29,6 +31,7 @@ public:
 	void on_collision(Collider2D* other);
 	id_t get_id();
 	std::string get_name();
+	GameScene* get_scene();
 	Transform& get_transform();
 	std::unordered_map<std::type_index, ObjectComponent*>& get_components();
 	std::vector<RenderableComponent*>& get_renderable_components();
@@ -47,11 +50,12 @@ public:
 		if (component != components.end()) {
 			return (T*) component->second;
 		}
-		return NULL;
+		return nullptr;
 	}
 private:
 	static id_t id_ctr;
 	static std::unordered_map<id_t, GameObject*> objects;
+	GameScene* scene;
 	GameObject(id_t id, std::string name);
 	GameObject(id_t id, std::string name, glm::vec3 pos);
 	id_t id;

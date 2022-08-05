@@ -90,6 +90,12 @@
     <ClCompile Include="src\Box2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h">
@@ -176,10 +182,21 @@
     <ClInclude Include="src\Box2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\LineOfSight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Line.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vshader.glsl" />
     <None Include="res\shaders\fshader.glsl" />
+    <None Include="res\shaders\linefshader.glsl" />
+    <None Include="res\shaders\linevshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\3dsaulgoodman.png">

@@ -99,6 +99,10 @@ GLFWwindow* Game::get_game_window() {
 	return game_window;
 }
 
+GameScene* Game::get_active_scene() {
+	return scene_manager.get_active_scene();
+}
+
 void Game::fixed_update() {
 	scene_manager.get_active_scene()->fixed_update();
 }

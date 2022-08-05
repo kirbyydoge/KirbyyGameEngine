@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "GameScene.h"
 
 id_t GameObject::id_ctr = 0;
 std::unordered_map<id_t, GameObject*> GameObject::objects;
@@ -17,14 +18,16 @@ GameObject::~GameObject() {
 
 }
 
-GameObject& GameObject::instantiate_object(std::string name) {
+GameObject& GameObject::instantiate_object(GameScene* scene, std::string name) {
 	GameObject* obj = new GameObject(GameObject::id_ctr, name, glm_ext::new_vec3(0.f, 0.f, 0.f));
+	obj->scene = scene;
 	GameObject::objects[GameObject::id_ctr++] = obj;
 	return *obj;
 }
 
-GameObject& GameObject::instantiate_object(std::string name, glm::vec3 pos) {
+GameObject& GameObject::instantiate_object(GameScene* scene, std::string name, glm::vec3 pos) {
 	GameObject* obj = new GameObject(GameObject::id_ctr, name, pos);
+	obj->scene = scene;
 	GameObject::objects[GameObject::id_ctr++] = obj;
 	return *obj;
 }
@@ -77,6 +80,10 @@ id_t GameObject::get_id() {
 
 std::string GameObject::get_name() {
 	return name;
+}
+
+GameScene* GameObject::get_scene() {
+	return scene;
 }
 
 Transform& GameObject::get_transform() {

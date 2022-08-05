@@ -18,12 +18,17 @@ GameRenderer* GameRenderer::get_renderer() {
 
 void GameRenderer::render_scene(GameScene* scene, GLFWwindow* window) const {
 	clear();
-	auto renderable_objects = scene->get_renderable_components();
+	auto& renderable_objects = scene->get_renderable_components();
 	for (auto obj : renderable_objects) {
+		obj->draw();
+	}
+	auto& render_once = scene->get_render_once();
+	for (auto obj : render_once) {
 		obj->draw();
 	}
 	glfwSwapBuffers(window);
 	glfwPollEvents();
+	render_once.clear();
 }
 
 void GameRenderer::clear() const {

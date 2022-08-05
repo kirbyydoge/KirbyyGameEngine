@@ -10,6 +10,10 @@
 #include "SaulGoodman.h"
 #include "Collider2D.h"
 #include "Box2D.h"
+#include "LineOfSight.h"
+#include "Game.h"
+#include "GameWindow.h"
+#include "Camera.h"
 
 void player_setup(BaseScene* scene) {
 	float positions[] = {
@@ -23,7 +27,7 @@ void player_setup(BaseScene* scene) {
 		2, 3, 0
 	};
 	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	GameObject* player = &GameObject::instantiate_object("Player", glm_ext::new_vec3(0, 0, 0));
+	GameObject* player = &GameObject::instantiate_object(scene, "Player", glm_ext::new_vec3(0, 0, 0));
 	int frame_count = 449;
 	Sprite* player_sprite = new Sprite(frame_count);
 	for (int i = 0; i < frame_count; i++) {
@@ -33,18 +37,18 @@ void player_setup(BaseScene* scene) {
 	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
 	IndexBuffer* ib = new IndexBuffer(indices, 6);
 	VertexBufferAttributes vba;
-	glm::mat4* projection_matrix = new glm::mat4;
-	*projection_matrix = glm::ortho(-10.0f, 10.0f, -7.5f, 7.5f, -1.0f, 1.0f);
 	vba.push<float>(2);
 	vba.push<float>(2);
 	va->add_buffer(*vb, vba);
 	player_sprite->set_shader(shader);
 	player_sprite->set_vertex_array(va);
 	player_sprite->set_index_buffer(ib);
-	player_sprite->set_projection(projection_matrix);
+	player_sprite->set_projection(&Camera::proj);
+	std::vector<std::pair<std::string, int>> anims;
+	anims.push_back(std::make_pair<std::string, int>("res/animations/sadabdulhamid/", 449));
 	player->add_component<Sprite>(player_sprite);
 	player->add_component<PlayerMovement>(new PlayerMovement);
-	player->add_component<SaulGoodman>(new SaulGoodman);
+	player->add_component<SaulGoodman>(new SaulGoodman(anims));
 	player->add_component<Collider2D>(
 		new Collider2D(
 			Collider2DType::BoxCollider2D,
@@ -53,8 +57,13 @@ void player_setup(BaseScene* scene) {
 			false
 		)
 	);
+	player->add_component<LineOfSight>(new LineOfSight(
+		glm::vec2(1024.0f, 768.0f),
+		glm::vec3(0.0f, 0.0f, 5.0f),
+		glm::vec2(20.0f, 15.0f)
+	));
 	scene->add_object(player);
-	scene->add_renderable(player);
+	scene->add_renderable_object(player);
 	scene->add_live_object(player);
 	scene->add_collider2D(player->get_component<Collider2D>());
 }
@@ -69,17 +78,17 @@ void background_setup(BaseScene* scene) {
 	};
 	*/
 	float positions[] = {
-	-10.0f, -7.5f, 0.0f, 0.0f,
-	 10.0f, -7.5f, 1.0f, 0.0f,
-	 10.0f,  7.5f, 1.0f, 1.0f,
-	-10.0f,  7.5f, 0.0f, 1.0f
+		-10.0f, -7.5f, 0.0f, 0.0f,
+		 10.0f, -7.5f, 1.0f, 0.0f,
+		 10.0f,  7.5f, 1.0f, 1.0f,
+		-10.0f,  7.5f, 0.0f, 1.0f
 	};
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
 	};
 	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	GameObject* background = &GameObject::instantiate_object("Background", glm_ext::new_vec3(0, 0, 0));
+	GameObject* background = &GameObject::instantiate_object(scene, "Background", glm_ext::new_vec3(0, 0, 0));
 	int frame_count = 465;
 	Sprite* player_sprite = new Sprite(frame_count);
 	for (int i = 0; i < frame_count; i++) {
@@ -89,55 +98,25 @@ void background_setup(BaseScene* scene) {
 	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
 	IndexBuffer* ib = new IndexBuffer(indices, 6);
 	VertexBufferAttributes vba;
-	glm::mat4* projection_matrix = new glm::mat4;
-	*projection_matrix = glm::ortho(-10.0f, 10.0f, -7.5f, 7.5f, -1.0f, 1.0f);
 	vba.push<float>(2);
 	vba.push<float>(2);
 	va->add_buffer(*vb, vba);
 	player_sprite->set_shader(shader);
 	player_sprite->set_vertex_array(va);
 	player_sprite->set_index_buffer(ib);
-	player_sprite->set_projection(projection_matrix);
+	player_sprite->set_projection(&Camera::proj);
 	background->add_component<Sprite>(player_sprite);
-	background->add_component<SaulGoodman>(new SaulGoodman);
 	scene->add_object(background);
-	scene->add_renderable(background);
+	scene->add_renderable_object(background);
 	scene->add_live_object(background);
 }
 
 void add_wall(BaseScene* scene, glm::vec3 center) {
-	float positions[] = {
-	-1.0f, -1.0f, 0.0f, 0.0f,
-	 1.0f, -1.0f, 1.0f, 0.0f,
-	 1.0f,  1.0f, 1.0f, 1.0f,
-	-1.0f,  1.0f, 0.0f, 1.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-	Shader* shader = new Shader("res/shaders/vshader.glsl", "res/shaders/fshader.glsl");
-	GameObject* wall = &GameObject::instantiate_object("Wall", center);
-	int frame_count = 465;
-	Sprite* wall_sprite = new Sprite(frame_count);
-	for (int i = 0; i < frame_count; i++) {
-		wall_sprite->set_texture("res/animations/3dsaulgoodman/" + std::to_string((i + 1)) + ".jpg", i);
-	}
-	VertexArray* va = new VertexArray;
-	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-	IndexBuffer* ib = new IndexBuffer(indices, 6);
-	VertexBufferAttributes vba;
-	glm::mat4* projection_matrix = new glm::mat4;
-	*projection_matrix = glm::ortho(-10.0f, 10.0f, -7.5f, 7.5f, -1.0f, 1.0f);
-	vba.push<float>(2);
-	vba.push<float>(2);
-	va->add_buffer(*vb, vba);
-	wall_sprite->set_shader(shader);
-	wall_sprite->set_vertex_array(va);
-	wall_sprite->set_index_buffer(ib);
-	wall_sprite->set_projection(projection_matrix);
-	wall->add_component<Sprite>(wall_sprite);
-	wall->add_component<SaulGoodman>(new SaulGoodman);
+	GameObject* wall = &GameObject::instantiate_object(scene, "Wall", center);
+	std::vector<std::pair<std::string, int>> anims;
+	anims.push_back(std::make_pair<std::string, int>("res/animations/bettercallsaul/", 65));
+	anims.push_back(std::make_pair<std::string, int>("res/animations/3dsaulgoodman/", 465));
+	wall->add_component<SaulGoodman>(new SaulGoodman(anims));
 	wall->add_component<Collider2D>(
 		new Collider2D(
 			Collider2DType::BoxCollider2D,
@@ -147,13 +126,14 @@ void add_wall(BaseScene* scene, glm::vec3 center) {
 		)
 	);
 	scene->add_object(wall);
-	scene->add_renderable(wall);
+	scene->add_renderable_object(wall);
 	scene->add_live_object(wall);
 	scene->add_collider2D(wall->get_component<Collider2D>());
 }
 
 void BaseScene::setup() {
-	background_setup(this);
+	//background_setup(this);
+	Camera::proj = glm::ortho(-10.0f, 10.0f, -7.5f, 7.5f, -1.0f, 1.0f);
 	add_wall(this, glm::vec3(-2, -2, 0));
 	add_wall(this, glm::vec3(2, -2, 0));
 	add_wall(this, glm::vec3(-2, 2, 0));
