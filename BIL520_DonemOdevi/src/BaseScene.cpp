@@ -17,11 +17,12 @@
 
 void player_setup(BaseScene* scene) {
 	float dims = 1.5f;
-	std::string path = "res/textures/amogus.png";
+	std::string path = "res/textures/maincharacter.png";
 	GameObject* player = &GameObject::instantiate_object(scene, "Player", glm_ext::new_vec3(0, 0, -0.4f), 
 															GameObjectTag::PLAYER);
 	player->add_component<PlayerMovement>(new PlayerMovement);
 	Sprite* sprite = Sprite::make_sprite(path, dims, dims);
+	sprite->set_draw_order(100);
 	player->add_component<Sprite>(sprite);
 	player->add_component<Collider2D>(
 		new Collider2D(
@@ -43,23 +44,24 @@ void player_setup(BaseScene* scene) {
 }
 
 void target_setup(BaseScene* scene, glm::vec3 center, float dims) {
-	std::string path = "res/textures/amogus.png";
-	GameObject* wall = &GameObject::instantiate_object(scene, "Target", center, GameObjectTag::TARGET);
+	std::string path = "res/textures/apple.png";
+	GameObject* target = &GameObject::instantiate_object(scene, "Target", center, GameObjectTag::TARGET);
 	std::vector<std::pair<std::string, int>> anims;
 	Sprite* tg_sprite = Sprite::make_sprite(path, dims, dims);
-	wall->add_component<Sprite>(tg_sprite);
-	wall->add_component<Collider2D>(
+	target->add_component<Sprite>(tg_sprite);
+	target->add_component<Collider2D>(
 		new Collider2D(
 			Collider2DType::BoxCollider2D,
-			new Box2D(&wall->get_transform(), dims * 0.6, dims * 0.6),
+			new Box2D(&target->get_transform(), dims * 0.6, dims * 0.6),
 			false,
 			true
 		)
 	);
-	scene->add_object(wall);
-	scene->add_renderable_object(wall);
-	scene->add_live_object(wall);
-	scene->add_collider2D(wall->get_component<Collider2D>());
+	tg_sprite->set_draw_order(10);
+	scene->add_object(target);
+	scene->add_renderable_object(target);
+	scene->add_live_object(target);
+	scene->add_collider2D(target->get_component<Collider2D>());
 }
 
 void background_setup(BaseScene* scene, glm::vec3 center) {
@@ -112,7 +114,7 @@ void make_map(BaseScene* scene, int* map, int dim_x, int dim_y, float width, flo
 
 void BaseScene::setup() {
 	Camera::proj = glm::ortho(-10.0f, 10.0f, -8.0f, 8.0f, -1.0f, 1.0f);
-	background_setup(this, glm::vec3(0, 0, -0.5));
+	background_setup(this, glm::vec3(0, 0, -0.9f));
 	int map[] = {
 		1,2,1,0,0,0,0,1,1,0,
 		1,0,0,0,1,0,0,0,0,1,

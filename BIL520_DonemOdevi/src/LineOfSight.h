@@ -4,6 +4,7 @@
 #include "GameInput.h"
 #include "GLFW/glfw3.h"
 #include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtx/vector_angle.hpp"
 #include "Line.h"
 #include "Mesh2D.h"
 
@@ -32,7 +33,7 @@ public:
 		center = &this->get_base()->get_transform();
 		scene = this->get_base()->get_scene();
 		mesh = new Mesh2D;
-		mesh->set_draw_order(100);
+		mesh->set_draw_order(5);
 		use_lines = false;
 	}
 	virtual void late_update() override {
@@ -59,6 +60,8 @@ private:
 		glm::vec3 origin = center->get_pos();
 		glm::vec3 dir = glm::normalize(glm::vec3(world_pos.x, world_pos.y, 0.0f) - origin);
 		glm::vec3 normal = glm::vec3(0.0f, 0.0f, 1.0f);
+		float angle = glm::orientedAngle(glm::vec2(1.0f, 0.0f), glm::vec2(dir.x, dir.y));
+		base->get_transform().set_rotation(glm::vec3(0.0f, 0.0f, angle));
 		float distance = 10.0f;
 		std::set<GameObject*> hit_list;
 		std::vector<std::pair<float, glm::vec3>> ray_vertices;

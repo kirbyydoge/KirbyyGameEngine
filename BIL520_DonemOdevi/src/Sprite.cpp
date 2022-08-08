@@ -115,7 +115,12 @@ Texture& Sprite::get_texture(unsigned int tex_idx) {
 }
 
 void Sprite::bind() const {
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), base->get_transform().get_pos());
+	glm::vec3 rotation = base->get_transform().get_rotation();
+	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	rotate = glm::rotate(glm::mat4(1.0f), rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	rotate = glm::rotate(glm::mat4(1.0f), rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 translate = glm::translate(glm::mat4(1.0f), base->get_transform().get_pos());
+	glm::mat4 view = translate * rotate;
 	shader->use();
 	shader->set_uniform<int>("u_texture", 0);
 	shader->set_uniform_matrix<glm::mat4>("u_model_proj", *proj);

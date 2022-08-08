@@ -50,13 +50,11 @@ uintptr_t GetModuleBaseAddress(DWORD dwProcID, char* szModuleName) {
 int main() {
 	DWORD dwProcId = GetProcId("BIL520_DonemOdevi.exe");
 	HANDLE pHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcId);
-	uintptr_t enablePtr = 0xC877AE0;
-	int enableVal = -1;
-	ReadProcessMemory(pHandle, (LPVOID)enablePtr, &enableVal, sizeof(int), NULL);
-	std::cout << "Val: " << enableVal << "\n";
-	enableVal = 1;
+	int enableVal = 1;
 	while(1 == 1) {
-		WriteProcessMemory(pHandle, (LPVOID)enablePtr, &enableVal, sizeof(int), NULL);
+		WriteProcessMemory(pHandle, (LPVOID)0xC2494E8, &enableVal, sizeof(int), NULL);
+		WriteProcessMemory(pHandle, (LPVOID)0xC2ADF70, &enableVal, sizeof(int), NULL);
+		WriteProcessMemory(pHandle, (LPVOID)0xC2AE868, &enableVal, sizeof(int), NULL);
 	}
 	CloseHandle(pHandle); 
 }
