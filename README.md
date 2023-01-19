@@ -1,4 +1,4 @@
-# KiGen
+# KiGEn
 
 This repository contains an open-source C++/OpenGL game engine as a Visual Studio project. Dependencies include the libraries used on a Windows 10 environment.
 
