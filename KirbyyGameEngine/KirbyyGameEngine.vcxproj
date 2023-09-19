@@ -96,8 +96,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{58f7aa30-0fcb-429c-8cab-5bc4ffc5118c}</ProjectGuid>
-    <RootNamespace>BIL520DonemOdevi</RootNamespace>
+    <RootNamespace>KirbyyGameEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>KirbyyGameEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

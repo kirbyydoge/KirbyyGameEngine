@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32630.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BIL520_DonemOdevi", "BIL520_DonemOdevi\BIL520_DonemOdevi.vcxproj", "{58F7AA30-0FCB-429C-8CAB-5BC4FFC5118C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KirbyyGameEngine", "KirbyyGameEngine\KirbyyGameEngine.vcxproj", "{58F7AA30-0FCB-429C-8CAB-5BC4FFC5118C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
